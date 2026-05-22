@@ -97,21 +97,7 @@ Page({
     });
   },
 
-  submitOrder: function() {
-    // ================== 强力视觉验证 ==================
-    wx.showModal({
-      title: '调试模式',
-      content: '准备发起真实支付请求！如果你看到这个弹窗，说明新代码已生效。',
-      showCancel: false,
-      success: (res) => {
-        console.log('[PaymentDebug] Modal confirmed, proceeding to payment');
-        this.realSubmitOrder();
-      }
-    });
-  },
-
-  realSubmitOrder: function() {
-    console.log('[PaymentDebug] Step 1: realSubmitOrder started');
+  submitOrder: async function() {
     if (this.data.items.length === 0) {
       wx.showToast({ title: '订单中没有商品', icon: 'none' });
       return;
@@ -120,7 +106,6 @@ Page({
     const user = wx.getStorageSync('userLoginInfo') || wx.getStorageSync('user') || {};
     const account = user.userAccount;
 
-    console.log('[PaymentDebug] User Account:', account);
     if (!account) {
       wx.showToast({ title: '请先登录', icon: 'none' });
       return;
@@ -128,59 +113,59 @@ Page({
 
     wx.showLoading({ title: '正在发起支付...', mask: true });
 
-    const orderId = 'ORD' + Date.now();
-    const total = parseFloat(this.data.totalPrice);
-    console.log(`[PaymentDebug] Step 2: Calling cloud function. OrderId: ${orderId}, Amount: ${total}`);
+    try {
+      const orderId = 'ORD' + Date.now();
+      const total = parseFloat(this.data.totalPrice);
+      const amountInFen = Math.round(total * 100); // 转换为分
 
-    wx.cloud.callFunction({
-      name: 'shangcheng',
-      data: {
-        action: 'createPayment',
+      // 调用 V2 支付云函数 'pay'
+      const res = await wx.cloud.callFunction({
+        name: 'pay',
         data: {
-          orderId: orderId,
-          amount: total,
-          shopAccount: account
+          orderid: orderId,
+          money: amountInFen
         }
-      },
-      success: (res) => {
-        console.log('[PaymentDebug] Step 3: Cloud function success response:', res);
-        if (res.result && res.result.success) {
-          const p = res.result.params;
-          console.log('[PaymentDebug] Step 4: Requesting wx.requestPayment with params:', p);
+      });
 
-          wx.requestPayment({
-            timeStamp: p.timestamp,
-            nonceStr: p.nonceStr,
-            package: `prepay_id=${p.prepay_id}`,
-            signType: 'RSA',
-            paySign: p.sign,
-            success: (payRes) => {
-              console.log('[PaymentDebug] Step 5: wx.requestPayment SUCCESS', payRes);
-              wx.showToast({ title: '支付成功', icon: 'success' });
-              setTimeout(() => {
-                wx.navigateTo({
-                  url: `/pages/productDetail/productDetail?status=pay_success&amount=${total}&method=${this.data.payMethod}`
-                });
-              }, 1500);
-            },
-            fail: (err) => {
-              console.error('[PaymentDebug] Step 5: wx.requestPayment FAIL', err);
-              wx.showToast({ title: '支付取消或失败', icon: 'none' });
-            }
-          });
-        } else {
-          console.error('[PaymentDebug] Step 4: Cloud function returned success:false', res.result);
-          wx.showToast({ title: res.result.message || '支付初始化失败', icon: 'none' });
-        }
-      },
-      fail: (err) => {
-        console.error('[PaymentDebug] Step 3: Cloud function call FAILED', err);
-        wx.showToast({ title: '服务器错误', icon: 'none' });
-      },
-      complete: () => {
-        console.log('[PaymentDebug] Step 6: callFunction complete');
-        wx.hideLoading();
+      wx.hideLoading();
+
+      if (res.result.code !== 0) {
+        throw new Error(res.result.msg || '获取支付参数失败');
       }
-    });
-  }
+
+      const payParams = res.result.data;
+
+      // 调起微信支付 (使用 V2 返回的参数名)
+      wx.requestPayment({
+        timeStamp: payParams.timeStamp,
+        nonceStr: payParams.nonceStr,
+        package: payParams.package,
+        signType: payParams.signType,
+        paySign: payParams.paySign,
+        success: (payRes) => {
+          wx.showToast({ title: '支付成功', icon: 'success' });
+          setTimeout(() => {
+            wx.navigateTo({
+              url: '/pages/orderHistory/orderHistory'
+            });
+          }, 1500);
+        },
+        fail: (err) => {
+          console.error('Payment Failed:', err);
+          if (err.errMsg && err.errMsg.includes('cancel')) {
+            wx.showToast({ title: '用户取消支付', icon: 'none' });
+          } else {
+            wx.showToast({ title: '支付失败', icon: 'none' });
+          }
+        }
+      });
+    } catch (err) {
+      wx.hideLoading();
+      console.error('Payment Error:', err);
+      wx.showToast({ title: err.message || '系统错误', icon: 'none' });
+    }
+  },
+
+  // 移除不再需要的 realSubmitOrder 方法
+
 })
