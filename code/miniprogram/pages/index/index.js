@@ -351,6 +351,12 @@ Page({
     });
   },
 
+  goToPayTest: function() {
+    wx.navigateTo({
+      url: '/pages/pay/pay'
+    });
+  },
+
   onRefreshPage: function() {
     wx.showLoading({ title: '刷新中...' });
     this.fetchProducts();

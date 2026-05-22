@@ -150,9 +150,10 @@ Page({
 
           wx.requestPayment({
             timeStamp: p.timestamp,
-            nonceStr: p.noncestr,
-            package: p.package,
-            sign: p.sign,
+            nonceStr: p.nonceStr,
+            package: `prepay_id=${p.prepay_id}`,
+            signType: 'RSA',
+            paySign: p.sign,
             success: (payRes) => {
               console.log('[PaymentDebug] Step 5: wx.requestPayment SUCCESS', payRes);
               wx.showToast({ title: '支付成功', icon: 'success' });

@@ -3,6 +3,8 @@ const cloud = require('wx-server-sdk')
 const mssql = require('mssql')
 const crypto = require('crypto')
 const axios = require('axios')
+const fs = require('fs')
+const path = require('path')
 cloud.init()
 
 const dbConfig = {
@@ -26,37 +28,9 @@ const dbConfig = {
 const V3_CONFIG = {
   mchid: '1744184735',
   appid: 'wxf3c03c2a0c59d299',
-  v3ApiKey: 'YHLTDlyh079100012026051923939h23', // 32位
-  merchantSerialNo: '7AC03D2606A7AFFEA257FA77D6A1617CDA7002D5', // 证书序列号
-  merchantPrivateKey: `-----BEGIN PRIVATE KEY-----
-  MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDkn5dIHApst0eS
-  dJpsIXzb6XmjZh3YB8HD1+WznoHYHE4FhSy7zCREezCe8rJfJpypwJuEEYi1SZ5W
-  3QqmQtNEx9pGziJDyRczEJ5NdJIPiog884xdQXJfmdzSlit2obCDondDVwPadN8q
-  l8IqQfhh/ONzHPUP886POAFbJ4URNFFI1MTXxyopuuVCHowYNcla5SQd7HlnvudP
-  nG7k6eSXmBPF+oZEMKr73q/0I3IrTbq8IBufMfO9ZX+nPPEPYBM/LsFMTf/LiAiX
-  cMCwkI2F6Wo0r47N6JLjFi0CGRBpS93+mboEvuAKAAMrktcVrdyaW/ymEJ7QNtbv
-  U9Zf7qMxAgMBAAECggEALj45k1RYp3TK/Uyoj4aWgsTO3cYh8zhecQaSZ6qACP5w
-  qZ0uVy4Lh+6C/yOIAMcGmS9kRWpmhITHijpblRWfNiJWfEvlkmByWNnbqz8Q7CPR
-  OsLoeVRrlfrBN7c4Q16hHX8XMH/BP8az/SGFHJcLboaAWyBYUUm3VjC11YJA4CGb
-  ELIb3HsYbKyHvJ076cpfgY2HH9lig7iVKA8UqyjaIIu6RAcKOGjRS8OybqwjjJxF
-  mpM0gdSi7kIABWBvbWIIi8FzAcPAsr3UE80f7G+6rdlkuP50cg/EPOiVqxe6+ITg
-  XhNtC3wQu3oyTn41nIT7RR3SuVBf+yRackTcCsPqAQKBgQDzQe4NBpZPDpG69MCF
-  9LMbV7omiBEzkmMN985jEBX0RLcscNNykKOqbE7sdhbY8RFgsmfq2w/Hu+8p+t45
-  GmA2kjW8ApwEBXjqsyrXiYCdrtHyzTeX06v1GpRUAEOoVc49S0UUTFQku9GpJqJb
-  mQK3objZFRj5Da+lBeHWbR8UyQKBgQDwmWsIfch57rmIrV4rFQVbvqEDMqkEEvFi
-  Xl3Kb65LS4EP0LlrKCL8JXsYku8MAOvRBa/djM1C+EBy4pbcxOxH8EtkFh4VS2rp
-  BcaIt4XVn2T5Sg2RAAa65IhJaMc69V3wXQxv+g5qg0VqEtWFUnDnSWrnyv+AdVnR
-  14mEDMRXKQKBgCg7VDq1RzDGERYhmqHNCb5Q8QmkYWvtHxLVVD4QEAF5R+5CrsX4
-  5AiwpxD2quqwXBZpC0TNfDulenWv9wbstNLxtY9lwxXrLcdrYH+LT0lE+5YzmKk0
-  qfD8t2F5NbdmkZiTlVY5FYWJxrA6IooRsWBbj+3fTmUKfW1GnsZO/9/5AoGAAgP2
-  /pI3LLZQPZHeORQrAFK/fIxfGBakiQNrW7fFyQGv6hcAhqJGcMBLoLASapJTZ2PZ
-  zkxQp9/2gj/dranEpPGhYAxDYkBIe/09ZYXMDDcSnHf/Vxid9dDWR28mRBssF0hg
-  Q0vf9Qp2eWYA/eXr5jQaPijYLRZOk1Bv6XhF6MkCgYAzITvwIpNKq5EF2EGko5dC
-  YTAW9JrAWSqRyKgW8y1u6ySZCm9CYwzDPrQ8fpw4q+Ma8PCZnDSiy4P0OsNhCSpT
-  rpKIkcvxjEQudx23T/cd40j5ZDiFyS1TPK9AqqnsrUQ9umDqCW7hDY0iXj3SyECQ
-  rvozGyYqjpm3r57vQNa/IA==
-  -----END PRIVATE KEY-----  
-  `
+  v3ApiKey: 'YHLTDlyh079100012026052223939h23', // 32位
+  merchantSerialNo: '223765FB3609C681933215FCABD3BB6AD4BCF5E6', // 证书序列号
+  privateKeyPath: path.join(__dirname, 'apiclient_key.pem')
 };
 
 let poolPromise = mssql.connect(dbConfig);
@@ -106,15 +80,15 @@ function generateV3Authorization(method, url, body, config) {
   const timestamp = Math.floor(Date.now() / 1000).toString();
   const nonceStr = crypto.randomBytes(16).toString('hex');
 
-  // 极致清理私钥：删除所有行首尾空格，并确保每行只有一个 \n
-  const cleanPrivateKey = config.merchantPrivateKey
-    .split('\n')
-    .map(line => line.trim())
-    .filter(line => line.length > 0)
-    .join('\n');
+  // 直接从本地文件读取私钥，完全避免字符串格式问题
+  let privateKey;
+  try {
+    privateKey = fs.readFileSync(config.privateKeyPath, 'utf8');
+  } catch (err) {
+    throw new Error(`无法读取私钥文件: ${err.message}`);
+  }
 
-  // 严格按照 V3 规范构建签名原串：数组 join('\n') 确保换行符数量绝对精准
-  // 格式：HTTP方法 + \n + URL + \n + 时间戳 + \n + 随机串 + \n + Body + \n
+  // 构建签名原串 (严格按照 V3 规范，末尾不加 \n)
   const signingComponents = [
     method.toUpperCase(),
     url,
@@ -122,14 +96,14 @@ function generateV3Authorization(method, url, body, config) {
     nonceStr,
     body || ''
   ];
-  const finalSigningString = signingComponents.join('\n') + '\n';
+  const finalSigningString = signingComponents.join('\n');
 
-  // 【极致调试】打印结果，用 | 包裹以便观察不可见字符
-  console.log('[PaymentDebug] Final Signing String (Visual):\n' + `|${finalSigningString}|`);
+  // 打印签名原串，用于排查不可见字符
+  console.log('[PaymentDebug] Signing String:', JSON.stringify(finalSigningString));
 
   const signer = crypto.createSign('RSA-SHA256');
   signer.update(finalSigningString);
-  const signature = signer.sign(cleanPrivateKey, 'base64');
+  const signature = signer.sign(privateKey, 'base64');
 
   return {
     timestamp,
@@ -170,10 +144,8 @@ exports.main = async (event, context) => {
       // 1. 获取配置
       const configRes = await executeQuery(`SELECT * FROM MerchantPaymentConfig WHERE MerchantId = @param0 AND PaymentType = 'wechat_pay'`, [shopAccount]);
 
-      // 使用 V3 配置
-      const payConfig = (V3_CONFIG.appid !== 'wxf3c03c2a0c59d299')
-        ? V3_CONFIG
-        : (configRes.recordsets[0] ? configRes.recordsets[0][0] : V3_CONFIG);
+      // 强制使用 V3_CONFIG 进行调试，排除数据库旧配置干扰
+      const payConfig = V3_CONFIG;
 
       if (!payConfig) throw new Error('商家未配置微信支付凭据');
 
@@ -186,7 +158,7 @@ exports.main = async (event, context) => {
         mchid: payConfig.mchid || payConfig.Mchid,
         description: `Order${orderId}`,
         out_trade_no: orderId,
-        notify_url: 'https://service-xyz.cloudbase.cloud/paymentCallback',
+        notify_url: 'https://yhocn.cn/paymentCallback',
         amount: {
           currency: 'CNY',
           total: Math.round(amount * 100)
@@ -202,7 +174,17 @@ exports.main = async (event, context) => {
 
       // 生成签名
       const auth = generateV3Authorization('POST', url, jsonBody, V3_CONFIG);
-      const authorizationHeader = `WECHATPAY2-SHA256-RSA2018 ${auth.timestamp} ${auth.nonceStr} ${auth.signature}`;
+      const authorizationHeader = `WECHATPAY2-SHA256-RSA2048 ${auth.timestamp} ${auth.nonceStr} ${auth.signature}`;
+
+      // ================== 终极调试日志 ==================
+      console.log('[PaymentDebug] --- Request Credentials Snapshot ---');
+      console.log(`[PaymentDebug] Target URL: https://api.mch.weixin.qq.com${url}`);
+      console.log(`[PaymentDebug] Using Mchid: ${V3_CONFIG.mchid}`);
+      console.log(`[PaymentDebug] Using Appid: ${V3_CONFIG.appid}`);
+      console.log(`[PaymentDebug] Using SerialNo: ${V3_CONFIG.merchantSerialNo}`);
+      console.log(`[PaymentDebug] Auth Header: ${authorizationHeader}`);
+      console.log(`[PaymentDebug] Request Body: ${jsonBody}`);
+      console.log('[PaymentDebug] ---------------------------------------');
 
       // 使用 Buffer 发送，防止 axios 修改 body 导致验签失败
       const response = await axios.post(`https://api.mch.weixin.qq.com${url}`, Buffer.from(jsonBody), {
@@ -223,14 +205,18 @@ exports.main = async (event, context) => {
         const prepayId = resData.prepay_id;
 
         // --- 修正 V3 预支付签名 (paySign) ---
-        // V3 签名规则：appid\n时间戳\n随机串\nprepay_id
+        // 严格按照官方文档：
+        // 1. 签名串共有四行，每一行以 \n 结尾，包括最后一行
+        // 2. 格式：小程序appID\n时间戳\n随机串\nprepay_id=xxx\n
         const payTimestamp = Math.floor(Date.now() / 1000).toString();
         const payNonceStr = crypto.randomBytes(16).toString('hex');
-        const paySigningString = `${V3_CONFIG.appid}\n${payTimestamp}\n${payNonceStr}\n${prepayId}`;
+        const paySigningString = `${V3_CONFIG.appid}\n${payTimestamp}\n${payNonceStr}\nprepay_id=${prepayId}\n`;
 
         const paySigner = crypto.createSign('RSA-SHA256');
         paySigner.update(paySigningString);
-        const paySign = paySigner.sign(V3_CONFIG.merchantPrivateKey, 'base64');
+
+        const privateKey = fs.readFileSync(V3_CONFIG.privateKeyPath, 'utf8');
+        const paySign = paySigner.sign(privateKey, 'base64');
 
         return {
           success: true,

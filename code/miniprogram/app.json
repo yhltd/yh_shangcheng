@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/pay/pay",
     "pages/user/user",
     "pages/user/profile/profile",
     "pages/admin/main/main",

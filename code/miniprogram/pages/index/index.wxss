@@ -64,6 +64,16 @@
   flex-shrink: 0;
 }
 
+.pay-test-btn {
+  font-size: 24rpx;
+  color: #fff;
+  background: #ff9800;
+  padding: 10rpx 20rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}
+
+
 /* 登录弹窗样式 */
 .modal-mask {
   position: fixed;

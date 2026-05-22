@@ -1,0 +1,81 @@
+.container {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 60rpx;
+  text-align: center;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: #888;
+  margin-top: 16rpx;
+  display: block;
+}
+
+.form-card {
+  width: 100%;
+  background: #fff;
+  padding: 40rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.05);
+}
+
+.form-group {
+  margin-bottom: 30rpx;
+}
+
+.label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+.input {
+  width: 100%;
+  height: 88rpx;
+  border: 1px solid #ddd;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  font-size: 30rpx;
+}
+
+.pay-btn {
+  width: 100%;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #07c160;
+  color: #fff;
+  border-radius: 45rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  border: none;
+  margin-top: 40rpx;
+}
+
+.tips {
+  margin-top: 60rpx;
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.tips text {
+  display: block;
+}

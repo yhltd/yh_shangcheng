@@ -15,6 +15,7 @@
       <view class="search-btn" bindtap="onSearchClick">搜索</view>
     </view>
     <view class="login-btn" bindtap="onLogin">{{userName}}</view>
+    <view class="pay-test-btn" bindtap="goToPayTest">支付测试</view>
   </view>
 
   <!-- 登录/注册弹窗 -->
