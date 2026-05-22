@@ -1,0 +1,22 @@
+<view class="admin-container">
+  <view class="page-header">
+    <text class="title">商品管理</text>
+  </view>
+
+  <view class="action-bar">
+    <button class="add-btn" bindtap="handleAddProduct">+ 新增商品</button>
+  </view>
+
+  <view class="product-list">
+    <view class="product-item card" wx:for="{{products}}" wx:key="id">
+      <view class="prod-info">
+        <text class="prod-name">{{item.mingcheng}}</text>
+        <text class="prod-detail">原价: ￥{{item.yuanjia}} | 折扣: {{item.zhekou}} | 折后价: ￥{{item.finalPrice}} | 库存: {{item.shuliang}}</text>
+      </view>
+      <view class="prod-actions">
+        <text class="edit-text" bindtap="handleEdit" data-id="{{item.id}}">编辑</text>
+        <text class="del-text" bindtap="handleDelete" data-id="{{item.id}}">删除</text>
+      </view>
+    </view>
+  </view>
+</view>

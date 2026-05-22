@@ -1,0 +1,35 @@
+{
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "description": "商城小程序项目配置文件",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "postcss": true,
+    "nodeModules": true,
+    "uglifyFileName": false,
+    "useIsolateContext": true,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "simulatorType": "wechat",
+  "compileType": "miniprogram",
+  "appid": "wxf3c03c2a0c59d299",
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  },
+  "libVersion": "3.15.2",
+  "srcMiniprogramRoot": "miniprogram/",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
+}

@@ -1,0 +1,24 @@
+<view class="store-container">
+  <view class="qr-header">
+    <image src="https://cdn-icons-png.flaticon.com/128/1828/1828853.png" class="qr-icon"></image>
+    <text class="qr-title">店铺专属二维码</text>
+    <text class="qr-subtitle">分享给客户，一键进入您的店铺</text>
+  </view>
+
+  <view class="qr-card">
+    <view class="qr-code-area">
+      <!-- 实际开发中这里会调用云函数生成动态二维码 -->
+      <image src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{qrUrl}}" mode="aspectFit" class="qr-image"></image>
+    </view>
+    <text class="qr-url-text">{{qrUrl}}</text>
+  </view>
+
+  <view class="action-area">
+    <button class="copy-btn" bindtap="copyQrUrl">复制店铺链接</button>
+    <button class="save-btn" bindtap="saveQrCode">保存二维码图片</button>
+  </view>
+
+  <view class="tips-box">
+    <text class="tips-text">提示：用户扫描此二维码将直接跳转至您的独立店铺首页，无需经过商城主页。</text>
+  </view>
+</view>

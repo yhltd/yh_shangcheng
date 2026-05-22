@@ -1,0 +1,97 @@
+.user-header {
+  display: flex;
+  align-items: center;
+  padding: 40rpx;
+  gap: 30rpx;
+}
+
+.avatar-placeholder {
+  width: 120rpx;
+  height: 120rpx;
+  background: #ddd;
+  border-radius: 60rpx;
+}
+
+.user-info .name {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+}
+
+.user-info .id {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+}
+
+.menu-item .arrow {
+  color: #ccc;
+}
+
+/* 地址更新弹窗样式 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  width: 80%;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  font-size: 32rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.address-input {
+  border: 1px solid #ddd;
+  padding: 20rpx;
+  margin: 20rpx 0;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40rpx;
+  gap: 20rpx;
+}
+
+.btn-cancel, .btn-save {
+  flex: 1;
+  font-size: 28rpx;
+  padding: 20rpx 0;
+  border-radius: 10rpx;
+}
+
+.btn-cancel {
+  background: #eee;
+  color: #666;
+}
+
+.btn-save {
+  background: #4CAF50;
+  color: #fff;
+}

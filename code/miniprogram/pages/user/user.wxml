@@ -1,0 +1,47 @@
+<view class="container">
+  <view class="user-header card">
+    <view class="avatar-placeholder"></view>
+    <view class="user-info" bindtap="goToProfile" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: 20rpx 0;width: 80%;">
+      <view style="display: flex; flex-direction: column;">
+        <text class="name">{{userInfo.nickName}}</text>
+        <text class="id">账号: {{userInfo.userAccount}}</text>
+      </view>
+      <text class="arrow-icon" style="font-size: 32rpx; color: #ccc; margin-right: 10rpx;">➔</text>
+    </view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item card" wx:if="{{userInfo.role === '用户'}}" bindtap="goToMerchantApply">
+      <text>成为商家</text>
+      <text class="arrow-icon" style="font-size: 32rpx; color: #ccc;">➔</text>
+    </view>
+    <view class="menu-item card" wx:if="{{userInfo.role === '商家'}}" bindtap="goToAdmin">
+      <text>我的店铺</text>
+      <text class="arrow-icon" style="font-size: 32rpx; color: #ccc;">➔</text>
+    </view>
+    <view class="menu-item card" bindtap="goToOrders">
+      <text>我的订单</text>
+      <text class="arrow-icon" style="font-size: 32rpx; color: #ccc;">➔</text>
+    </view>
+    <view class="menu-item card" bindtap="goToAddress">
+      <text>收货地址</text>
+      <text class="arrow-icon" style="font-size: 32rpx; color: #ccc;">➔</text>
+    </view>
+    <view class="menu-item card" bindtap="goToAbout">
+      <text>关于商城</text>
+      <text class="arrow-icon" style="font-size: 32rpx; color: #ccc;">➔</text>
+    </view>
+  </view>
+</view>
+
+<!-- 地址更新弹窗 -->
+<view class="modal-mask" wx:if="{{showAddressModal}}">
+  <view class="modal-content">
+    <view class="modal-header">更新收货地址</view>
+    <input class="address-input" value="{{currentAddress}}" bindinput="onAddressInput" placeholder="请输入详细收货地址" />
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closeAddressModal">取消</button>
+      <button class="btn-save" bindtap="saveAddress">保存</button>
+    </view>
+  </view>
+</view>

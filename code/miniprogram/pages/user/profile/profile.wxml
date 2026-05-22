@@ -1,0 +1,24 @@
+<view class="container">
+  <view class="profile-card card">
+    <view class="avatar-box">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    </view>
+
+    <view class="info-list">
+      <view class="info-item">
+        <text class="label">用户名</text>
+        <input class="input-val" value="{{userInfo.nickName}}" bindinput="onInputChange" data-field="nickName" />
+      </view>
+      <view class="info-item">
+        <text class="label">账号</text>
+        <input class="input-val" value="{{userInfo.userAccount}}" bindinput="onInputChange" data-field="userAccount" />
+      </view>
+      <view class="info-item">
+        <text class="label">密码</text>
+        <input class="input-val" value="{{userInfo.mima}}" bindinput="onInputChange" data-field="mima" />
+      </view>
+    </view>
+
+    <button class="update-btn" bindtap="doUpdate">保存修改</button>
+  </view>
+</view>

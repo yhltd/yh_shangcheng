@@ -1,0 +1,202 @@
+.checkout-container {
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding-bottom: 140rpx;
+}
+
+.section-card {
+  background: #fff;
+  margin: 20rpx 30rpx;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.03);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  padding-bottom: 20rpx;
+}
+
+.section-header .title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-header .arrow {
+  color: #ccc;
+  font-size: 24rpx;
+}
+
+/* 地址样式 */
+.address-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.user-detail {
+  display: flex;
+  gap: 20rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.address-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 商品列表样式 */
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.product-img {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  background: #f0f0f0;
+}
+
+.product-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140rpx;
+}
+
+.product-name {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.product-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.product-price {
+  font-size: 32rpx;
+  color: #e4393c;
+  font-weight: bold;
+}
+
+.product-qty {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 支付方式样式 */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.payment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  border: 2rpx solid #eee;
+  border-radius: 12rpx;
+  transition: all 0.2s;
+}
+
+.payment-item.active {
+  border-color: #4CAF50;
+  background-color: #f0f9f0;
+}
+
+.pay-icon {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 备注样式 */
+.remark-row {
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+}
+
+.remark-row .title {
+  font-size: 28rpx;
+  color: #333;
+  white-space: nowrap;
+}
+
+.remark-input {
+  flex: 1;
+  font-size: 26rpx;
+  color: #666;
+  border-bottom: 1rpx solid #eee;
+  padding-bottom: 10rpx;
+}
+
+/* 底部栏样式 */
+.footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.05);
+  z-index: 100;
+}
+
+.total-section {
+  display: flex;
+  align-items: baseline;
+  gap: 10rpx;
+}
+
+.total-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.total-amount {
+  font-size: 40rpx;
+  color: #e4393c;
+  font-weight: bold;
+}
+
+.submit-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: bold;
+  border-radius: 60rpx;
+  padding: 0 60rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  border: none;
+}

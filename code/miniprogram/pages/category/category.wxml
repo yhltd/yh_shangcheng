@@ -1,0 +1,56 @@
+<view class="category-container">
+  <view class="category-main">
+    <!-- 左侧大分类列表 -->
+    <scroll-view class="category-left" scroll-y>
+      <view
+        class="category-item {{selectedCategory && selectedCategory.id === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="onCategoryTap"
+        data-index="{{index}}"
+      >
+        <text class="category-icon">{{item.icon}}</text>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+
+    <!-- 右侧展示区 -->
+    <view class="category-right">
+      <view class="sub-category-placeholder" wx:if="{{!selectedCategory}}">
+        <text class="placeholder-text">请选择左侧分类</text>
+      </view>
+
+      <view class="sub-category-content" wx:else>
+        <!-- 子类列表：仅在未选中具体子类时显示 -->
+        <view class="sub-category-list" wx:if="{{!showProducts}}">
+          <view class="section-title">—— {{selectedCategory.name}} 子类 ——</view>
+          <view class="sub-grid">
+            <view class="sub-item {{selectedSubCategory === sub ? 'active' : ''}}" wx:for="{{subCategories}}" wx:for-item="sub" wx:key="*this" bindtap="onSubCategoryTap" data-name="{{sub}}">
+              {{sub}}
+            </view>
+          </view>
+        </view>
+
+        <!-- 产品列表：选中子类后显示 -->
+        <view class="product-display" wx:else>
+          <view class="display-header">
+            <text class="back-btn" bindtap="onBackToSub">← 返回子类</text>
+            <text class="display-title">{{selectedSubCategory}} 商品</text>
+          </view>
+          <scroll-view scroll-y class="product-scroll">
+            <view class="product-grid">
+              <view class="product-card" wx:for="{{products}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+                <image src="{{item.img}}" mode="aspectFill" class="product-img"></image>
+                <text class="product-name">{{item.name}}</text>
+                <text class="product-price">￥{{item.price}}</text>
+              </view>
+            </view>
+            <view class="no-products" wx:if="{{products.length === 0}}">
+              暂无相关商品
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

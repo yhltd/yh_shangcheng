@@ -1,0 +1,47 @@
+<view class="admin-container">
+  <view class="page-header">
+    <text class="title">信息配置</text>
+  </view>
+
+  <view class="config-list">
+    <view class="config-item card">
+      <text class="label">店铺名称</text>
+      <input class="config-input" value="{{config.dianpu}}" placeholder="请输入店铺名称" bindinput="onInputChange" data-field="dianpu" />
+    </view>
+    <view class="config-item card">
+      <text class="label">配送费 (元)</text>
+      <input class="config-input" type="digit" value="{{config.peisongfei}}" placeholder="0.00" bindinput="onInputChange" data-field="peisongfei" />
+    </view>
+    <view class="config-item card">
+      <text class="label">客服电话</text>
+      <input class="config-input" type="number" value="{{config.dianhua}}" placeholder="请输入电话" bindinput="onInputChange" data-field="dianhua" />
+    </view>
+
+    <view class="section-title">支付配置</view>
+    <view class="config-item card">
+      <text class="label">支付方式</text>
+      <radio-group class="radio-group" bindchange="onPayTypeChange">
+        <label class="radio-item">
+          <radio value="wechat_pay" checked="{{payConfig.paymentType === 'wechat_pay'}}">微信支付</radio>
+        </label>
+        <label class="radio-item">
+          <radio value="alipay" checked="{{payConfig.Type === 'alipay'}}">支付宝</radio>
+        </label>
+      </radio-group>
+    </view>
+    <view class="config-item card">
+      <text class="label">AppID</text>
+      <input class="config-input" value="{{payConfig.AppId}}" placeholder="请输入 AppID" bindinput="onPayInputChange" data-field="AppId" />
+    </view>
+    <view class="config-item card">
+      <text class="label">商户号 (MCHID)</text>
+      <input class="config-input" value="{{payConfig.Mchid}}" placeholder="请输入商户号" bindinput="onPayInputChange" data-field="Mchid" />
+    </view>
+    <view class="config-item card">
+      <text class="label">API 密钥 (ApiKey)</text>
+      <input class="config-input" password value="{{payConfig.ApiKey}}" placeholder="请输入 API 密钥" bindinput="onPayInputChange" data-field="ApiKey" />
+    </view>
+  </view>
+
+  <button class="save-btn" bindtap="doSave">保存配置</button>
+</view>

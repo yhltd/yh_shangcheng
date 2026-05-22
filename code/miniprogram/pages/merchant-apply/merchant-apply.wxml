@@ -1,0 +1,70 @@
+<view class="apply-container">
+  <view class="header-section">
+    <view class="header-bg"></view>
+    <view class="header-content">
+      <image src="https://cdn-icons-png.flaticon.com/128/1584/1584892.png" class="header-img"></image>
+      <text class="header-title">商家入驻计划</text>
+      <text class="header-subtitle">加入我们，让您的好产品被更多人发现</text>
+    </view>
+  </view>
+
+  <view class="content-wrapper">
+    <view class="notice-card">
+      <view class="card-title-group">
+        <text class="card-icon">📜</text>
+        <text class="card-title">入驻须知</text>
+      </view>
+      <view class="notice-list">
+        <view class="notice-item">
+          <view class="dot-wrapper"><view class="dot"></view></view>
+          <text class="text">提供真实的身份信息及营业执照副本</text>
+        </view>
+        <view class="notice-item">
+          <view class="dot-wrapper"><view class="dot"></view></view>
+          <text class="text">商品必须符合国家法律法规，严禁违禁品</text>
+        </view>
+        <view class="notice-item">
+          <view class="dot-wrapper"><view class="dot"></view></view>
+          <text class="text">保证商品描述与实物一致，诚实经营</text>
+        </view>
+        <view class="notice-item">
+          <view class="dot-wrapper"><view class="dot"></view></view>
+          <text class="text">所有商品经平台审核通过后方可正式上架</text>
+        </view>
+        <view class="notice-item">
+          <view class="dot-wrapper"><view class="dot"></view></view>
+          <text class="text">需及时处理订单及售后，维持店铺信誉</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="benefit-card">
+      <view class="card-title-group">
+        <text class="card-icon">🎁</text>
+        <text class="card-title">入驻权益</text>
+      </view>
+      <view class="benefit-grid">
+        <view class="benefit-item">
+          <text class="b-icon">🚀</text>
+          <text class="b-text">流量扶持</text>
+        </view>
+        <view class="benefit-item">
+          <text class="b-icon">📦</text>
+          <text class="b-text">订单管理</text>
+        </view>
+        <view class="benefit-item">
+          <text class="b-icon">📊</text>
+          <text class="b-text">数据分析</text>
+        </view>
+        <view class="benefit-item">
+          <text class="b-icon">💳</text>
+          <text class="b-text">快速结算</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-action">
+    <button class="apply-btn" bindtap="handleApply">立即申请成为商家</button>
+  </view>
+</view>

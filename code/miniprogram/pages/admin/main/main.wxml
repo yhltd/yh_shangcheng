@@ -1,0 +1,13 @@
+<view class="admin-container">
+  <view class="admin-header">
+    <text class="title">商家管理后台</text>
+    <view class="back-btn" bindtap="goBack">返回商城</view>
+  </view>
+
+  <view class="admin-grid">
+    <view class="admin-card" wx:for="{{modules}}" wx:key="id" bindtap="onNavigate" data-path="{{item.path}}">
+      <text class="admin-icon">{{item.icon}}</text>
+      <text class="admin-name">{{item.name}}</text>
+    </view>
+  </view>
+</view>

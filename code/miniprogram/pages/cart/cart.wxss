@@ -1,0 +1,124 @@
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 200rpx;
+  color: #999;
+}
+
+.cart-empty .btn-primary {
+  margin-top: 40rpx;
+}
+
+.cart-list {
+  background-color: #F8F8F8;
+  min-height: 100vh;
+  padding-bottom: 140rpx;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin: 20rpx 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.cart-item-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.item-info .name {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.item-info .price {
+  font-size: 32rpx;
+  color: #E4393C;
+  font-weight: bold;
+}
+
+.item-qty {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.btn-delete-subtle {
+  color: #E4393C;
+  background: transparent;
+  border: 1px solid #FFCDCD;
+  font-size: 24rpx;
+  padding: 0 20rpx;
+  border-radius: 8rpx;
+  line-height: 50rpx;
+}
+
+.footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40rpx;
+  box-shadow: 0 -10rpx 20rpx rgba(0,0,0,0.05);
+}
+
+.total-price {
+  color: #E4393C;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.btn-buy {
+  padding: 0 60rpx;
+  border-radius: 40rpx;
+  color: white;
+  font-size: 28rpx;
+  background-color: #4CAF50;
+  font-weight: bold;
+  border: none;
+}
+
+.select-all-header {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60rpx;
+  height: 60rpx;
+  z-index: 20;
+}
+
+.select-all-header text {
+  font-size: 28rpx;
+  color: #333;
+  margin-left: 10rpx;
+}
+

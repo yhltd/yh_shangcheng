@@ -1,0 +1,136 @@
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-header">
+    <view class="refresh-box" bindtap="onRefreshPage">
+      <text class="refresh-icon">🔄</text>
+      <text class="refresh-text">刷新</text>
+    </view>
+    <view class="search-bar">
+      <input
+        class="search-input"
+        placeholder="🔍 搜索..."
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+      />
+      <view class="search-btn" bindtap="onSearchClick">搜索</view>
+    </view>
+    <view class="login-btn" bindtap="onLogin">{{userName}}</view>
+  </view>
+
+  <!-- 登录/注册弹窗 -->
+  <view class="modal-mask" wx:if="{{showLoginModal || showRegisterModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{showRegisterModal ? '创建账号' : '欢迎回来'}}</text>
+        <text class="close-btn" bindtap="closeLoginModal">×</text>
+      </view>
+
+      <view wx:if="{{!showRegisterModal}}">
+        <view class="form-group">
+          <input class="modal-input" placeholder="请输入手机号" type="number" bindinput="bindInputAccount" />
+        </view>
+        <view class="form-group">
+          <input class="modal-input" placeholder="请输入密码" type="text" password="{{passwordVisible ? false : true}}" bindinput="bindInputPassword" />
+          <text class="password-toggle" bindtap="togglePasswordVisibility">
+            {{passwordVisible ? '👁️' : '🙈'}}
+          </text>
+        </view>
+        <view class="modal-actions">
+          <button class="primary-btn" bindtap="doLogin">登录</button>
+          <view class="register-link" bindtap="goToRegister">还没有账号? <text class="highlight">立即注册</text></view>
+        </view>
+      </view>
+
+      <view wx:else>
+        <view class="form-group">
+          <input class="modal-input" placeholder="请输入用户名" bindinput="bindInputRegName" />
+        </view>
+        <view class="form-group">
+          <input class="modal-input" placeholder="请输入账号" type="number" bindinput="bindInputRegAccount" />
+        </view>
+        <view class="form-group">
+          <input class="modal-input" placeholder="请输入密码" type="text" password bindinput="bindInputRegPassword" />
+        </view>
+        <view class="modal-actions">
+          <button class="primary-btn" bindtap="doRegister">提交注册</button>
+          <view class="register-link" bindtap="onLogin">已有账号? <text class="highlight">立即登录</text></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 热销产品横向滚动列表 -->
+  <view class="offer-section">
+    <view class="section-header-inline">
+      <text class="title">热销产品</text>
+    </view>
+    <scroll-view scroll-x="true" class="offer-scroll">
+      <view class="offer-item card" wx:for="{{hotProducts}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+        <view class="offer-tag">热销</view>
+        <image src="{{item.img}}" mode="aspectFill" class="offer-img"></image>
+        <view class="offer-info">
+          <text class="offer-name">{{item.name}}</text>
+          <view class="offer-price-row">
+            <text class="offer-price">￥{{item.price}}</text>
+            <text class="offer-original">￥{{item.originalPrice}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 快捷分类入口 (升级为左右拖动) -->
+  <view class="category-section">
+    <scroll-view scroll-x="true" class="category-scroll">
+      <view class="cat-item {{currentCategory === '全部' ? 'cat-active' : ''}}" bindtap="onCategoryTap" data-name="全部">
+        <view class="cat-icon-box">
+          <image src="https://cdn-icons-png.flaticon.com/128/1828/1828853.png" mode="aspectFit" class="cat-icon-img"></image>
+        </view>
+        <text class="cat-name">全部</text>
+      </view>
+      <view class="cat-item {{currentCategory === item.name ? 'cat-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-name="{{item.name}}">
+        <view class="cat-icon-box">
+          <image src="{{item.icon}}" mode="aspectFit" class="cat-icon-img"></image>
+        </view>
+        <text class="cat-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 促销 Banner -->
+  <view class="promo-banner card">
+    <text class="promo-title">新人尝鲜价</text>
+    <text class="promo-subtitle">每天限额抢购，先到先得</text>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="section-header">
+    <text class="title">{{currentCategory === '全部' ? '全部' : currentCategory + '推荐'}}</text>
+  </view>
+
+  <view class="product-list">
+    <view
+      class="product-item card {{item.isSoldOut ? 'sold-out' : ''}}"
+      wx:for="{{filteredProducts}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+      data-is-sold-out="{{item.isSoldOut}}"
+    >
+      <view class="product-img-box">
+        <image src="{{item.img}}" mode="aspectFill" class="product-img"></image>
+        <view class="sold-out-tag" wx:if="{{item.isSoldOut}}" catchtap="preventClick">售罄</view>
+      </view>
+      <view class="product-info">
+        <text class="product-name">{{item.name}}</text>
+        <view class="price-row">
+          <text class="current-price">￥{{item.price}}</text>
+          <text class="unit">/件</text>
+          <text class="tag-special" wx:if="{{item.zhekou && item.zhekou < 1}}">特价</text>
+        </view>
+        <view class="original-price" wx:if="{{item.originalPrice !== item.price}}">￥{{item.originalPrice}}</view>
+      </view>
+      <view class="cart-icon-btn bg-primary-green {{item.isSoldOut ? 'disabled' : ''}}">🛒</view>
+    </view>
+  </view>
+</view>

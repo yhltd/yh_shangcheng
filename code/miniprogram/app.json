@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/user/user",
+    "pages/user/profile/profile",
+    "pages/admin/main/main",
+    "pages/admin/product-manage/product-manage",
+    "pages/admin/product-add/product-add",
+    "pages/admin/product-edit/product-edit",
+    "pages/admin/profit-stats/profit-stats",
+    "pages/admin/info-config/info-config",
+    "pages/category/category",
+    "pages/cart/cart",
+    "pages/productDetail/productDetail",
+    "pages/checkout/checkout",
+    "pages/orderHistory/orderHistory",
+    "pages/about/about",
+    "pages/merchant-apply/merchant-apply",
+    "pages/merchant-store/merchant-store",
+    "pages/merchant-store/qr-code"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置将用于获取配送地址"
+    }
+  },
+  "window": {
+    "backgroundColor": "#FFFFFF",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "商务商城",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#4CAF50",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/category/category",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的"
+      }
+    ]
+  }
+}

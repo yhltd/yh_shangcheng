@@ -1,0 +1,45 @@
+<view class="about-container">
+  <view class="about-header">
+    <image class="logo" src="/sucai/logo.png" mode="aspectFit"></image>
+    <text class="title">关于商务商城</text>
+    <text class="version">版本 v1.0.0</text>
+  </view>
+
+  <view class="about-content">
+    <view class="section">
+      <view class="section-title">我们的愿景</view>
+      <view class="section-text">
+        商务商城致力于打造一个高效、便捷、透明的商务采购平台。我们连接优质供应商与企业客户，通过数字化手段简化采购流程，降低企业运营成本，提升商务交易效率。
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">核心优势</view>
+      <view class="feature-list">
+        <view class="feature-item">
+          <text class="feature-icon">✅</text>
+          <text class="feature-text">正品保证：严格的供应商筛选机制，确保每一件商品均来自正规渠道。</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">⚡</text>
+          <text class="feature-text">极速响应：专业的客服团队，提供全天候的订单追踪与售后支持。</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">📈</text>
+          <text class="feature-text">智能管理：为商家提供强大的店铺管理工具，实时掌握经营动态。</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">服务承诺</view>
+      <view class="section-text">
+        我们承诺以诚信为本，提供最具竞争力的价格与最优质的服务。如果您在购物过程中遇到任何问题，请随时联系我们的管理团队。
+      </view>
+    </view>
+  </view>
+
+  <view class="about-footer">
+    <text>© 2026 商务商城 版权所有</text>
+  </view>
+</view>
