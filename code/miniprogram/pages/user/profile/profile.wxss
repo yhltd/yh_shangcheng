@@ -8,3 +8,5 @@
 .input-val { flex: 1; font-size: 28rpx; color: #333; text-align: left; }
 .readonly { color: #999; }
 .update-btn { width: 100%; background: #4CAF50; color: #fff; border-radius: 45rpx; height: 90rpx; line-height: 90rpx; font-weight: bold; }
+
+

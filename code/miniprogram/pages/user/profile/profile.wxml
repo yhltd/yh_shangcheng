@@ -1,7 +1,8 @@
 <view class="container">
   <view class="profile-card card">
-    <view class="avatar-box">
+    <view class="avatar-box" bindtap="openAvatarUrlModal">
       <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="avatar-edit-badge">点击更换头像</view>
     </view>
 
     <view class="info-list">
@@ -22,3 +23,38 @@
     <button class="update-btn" bindtap="doUpdate">保存修改</button>
   </view>
 </view>
+
+<!-- URL 输入弹窗 -->
+<view class="modal-mask" wx:if="{{showUrlModal}}">
+  <view class="modal-content">
+    <view class="modal-header">更换头像 URL</view>
+    <input class="form-input" value="{{tempUrl}}" placeholder="请输入图片链接 (http://...)" bindinput="onUrlInput" />
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closeAvatarModal">取消</button>
+      <button class="btn-save" bindtap="saveAvatarUrl">确认</button>
+    </view>
+  </view>
+</view>
+
+justify-content: space-between;
+    margin-top: 40rpx;
+    gap: 20rpx;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    font-size: 28rpx;
+    padding: 20rpx 0;
+    border-radius: 10rpx;
+    background: #eee;
+    color: #666;
+  }
+
+  .btn-save {
+    flex: 1;
+    font-size: 28rpx;
+    padding: 20rpx 0;
+    border-radius: 10rpx;
+    background: #4CAF50;
+    color: #fff;
+  }

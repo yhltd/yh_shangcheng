@@ -10,4 +10,6 @@
 .prod-detail { font-size: 24rpx; color: #888; margin-top: 10rpx; }
 .prod-actions { display: flex; gap: 20rpx; }
 .edit-text { color: #4CAF50; font-size: 26rpx; }
+.return-text { color: #4CAF50; font-size: 26rpx; font-weight: bold; }
+.reject-text { color: #f44336; font-size: 26rpx; margin-left: 10rpx; }
 .del-text { color: #E4393C; font-size: 26rpx; }

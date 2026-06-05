@@ -19,9 +19,12 @@
       </view>
       <view class="order-footer">
         <view>合计: <text class="total-amount">￥{{item.xshj}}</text></view>
-        <text class="status-tag {{item.ddzt === '下单' ? 'status-ordered' : 'status-returned'}}">
-          {{item.ddzt}}
-        </text>
+        <view class="status-area">
+          <text class="status-tag {{item.ddzt === '下单' ? 'status-ordered' : (item.ddzt === '申请退货' ? 'status-applying' : 'status-returned')}}">
+            {{item.ddzt}}
+          </text>
+          <button class="btn-apply" wx:if="{{item.ddzt === '下单'}}" bindtap="applyReturn" data-ddh="{{item.ddh}}">申请退货</button>
+        </view>
       </view>
     </view>
   </view>

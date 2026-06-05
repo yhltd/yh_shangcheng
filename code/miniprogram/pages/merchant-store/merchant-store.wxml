@@ -21,9 +21,9 @@
 
   <!-- 店铺 Banner -->
   <view class="store-banner">
-    <image src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80" mode="aspectFill"></image>
+    <image src="{{storeConfig.bannerUrl}}" mode="aspectFill"></image>
     <view class="banner-overlay">
-      <text class="banner-title">欢迎光临我的店铺</text>
+      <text class="banner-title">{{storeConfig.welcomeText}}</text>
       <text class="banner-subtitle">精选优质产品，诚信经营，品质保证</text>
     </view>
   </view>

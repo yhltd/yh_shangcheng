@@ -7,30 +7,37 @@
   <view class="cart-list" wx:else>
     <view class="select-all-header">
       <view class="checkbox-wrapper" bindtap="toggleSelectAll" data-value="{{!selectAll}}">
-        <checkbox checked="{{selectAll}}" color="#4CAF50" />
+        <checkbox checked="{{selectAll}}" color="#ff4400" />
       </view>
       <text>全选</text>
     </view>
-    <view class="cart-item card" wx:for="{{cartItems}}" wx:key="id">
-      <view class="cart-item-main">
+
+    <view class="cart-item card" wx:for="{{cartItems}}" wx:key="name">
+      <view class="cart-item-left">
         <view class="checkbox-wrapper" bindtap="toggleSelect" data-index="{{index}}" data-value="{{!item.selected}}">
-          <checkbox checked="{{item.selected}}" color="#4CAF50" />
+          <checkbox checked="{{item.selected}}" color="#ff4400" />
         </view>
         <view class="item-info">
           <text class="name">{{item.name}}</text>
           <text class="price">￥{{item.price}}</text>
         </view>
-        <view class="item-qty">
-          <text>数量: {{item.count}}</text>
-        </view>
       </view>
-      <view class="cart-item-actions">
-        <button class="btn-delete-subtle" bindtap="deleteItem" data-id="{{item.id}}">删除</button>
+
+      <view class="cart-item-right">
+        <view class="stepper">
+          <view class="step-btn minus" bindtap="minusCount" data-index="{{index}}">-</view>
+          <text class="step-num">{{item.count}}</text>
+          <view class="step-btn plus" bindtap="plusCount" data-index="{{index}}">+</view>
+        </view>
+        <view class="delete-btn" bindtap="deleteItem" data-id="{{item.id}}">🗑️</view>
       </view>
     </view>
+
     <view class="footer-bar">
-      <text>合计: <text class="total-price">￥{{totalPrice}}</text></text>
-      <button class="btn-buy btn-primary" bindtap="checkout">结算</button>
+      <view class="total-section">
+        <text>合计: <text class="total-price">￥{{totalPrice}}</text></text>
+      </view>
+      <button class="btn-buy" bindtap="checkout">结算</button>
     </view>
   </view>
 </view>

@@ -1,6 +1,10 @@
 <view class="container">
   <view class="product-header card">
-    <image src="{{img}}" mode="aspectFill" class="placeholder-img"></image>
+    <swiper class="product-swiper" autoplay="true" interval="3000" indicator-dots="true" indicator-color="rgba(0,0,0,0.3)" indicator-active-color="#07c160">
+      <swiper-item wx:for="{{imageList}}" wx:key="*this">
+        <image src="{{item}}" mode="aspectFill" class="placeholder-img"></image>
+      </swiper-item>
+    </swiper>
     <view class="info">
       <text class="name">{{name}}</text>
       <view class="price-row">

@@ -73,6 +73,16 @@
   flex-shrink: 0;
 }
 
+.admin-toggle {
+  font-size: 24rpx;
+  color: #666;
+  background: #e0e0e0;
+  padding: 10rpx 20rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+  border: 1rpx solid #ccc;
+}
+
 
 /* 登录弹窗样式 */
 .modal-mask {
@@ -227,7 +237,37 @@
   justify-content: center;
   margin-bottom: 10rpx;
   border: 2rpx solid transparent;
+  position: relative;
 }
+
+.admin-tools {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  display: flex;
+  gap: 4rpx;
+  z-index: 10;
+}
+
+.tool-btn {
+  width: 30rpx;
+  height: 30rpx;
+  font-size: 20rpx;
+  line-height: 30rpx;
+  text-align: center;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tool-btn.edit {
+  background: #4CAF50;
+}
+
+.tool-btn.delete {
+  background: #f44336;
+}
+
 
 .cat-icon-img {
   width: 60rpx;

@@ -90,6 +90,28 @@
   color: #F44336;
 }
 
+.status-applying {
+  background-color: #FFF3E0;
+  color: #FF9800;
+}
+
+.status-area {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.btn-apply {
+  font-size: 22rpx;
+  background-color: #FF9800;
+  color: white;
+  padding: 0 20rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  border-radius: 25rpx;
+  margin: 0;
+}
+
 .btn-home {
   margin-top: 40rpx;
   background-color: #4CAF50;

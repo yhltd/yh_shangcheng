@@ -1,74 +1,126 @@
 <view class="edit-container">
-  <view class="form-card">
-    <view class="form-item">
-      <text class="form-label">商品名称</text>
-      <input class="form-input" value="{{product.mingcheng}}" placeholder="请输入名称" bindinput="onInputChange" data-field="mingcheng" />
+    <view class="form-card">
+      <view class="form-item">
+        <text class="form-label">商品名称</text>
+        <input class="form-input" value="{{product.mingcheng}}" placeholder="请输入名称" bindinput="onInputChange"
+  data-field="mingcheng" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">商品详情</text>
+        <textarea class="form-input" value="{{product.xiangqing}}" placeholder="请输入详情" bindinput="onInputChange"
+  data-field="xiangqing" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">分类</text>
+        <picker bindchange="onCategoryChange" value="{{categoryIndex}}" range="{{categories}}" range-key="name">
+          <view class="form-input">
+            {{categories[categoryIndex] ? categories[categoryIndex].name : '请选择分类'}}
+          </view>
+        </picker>
+      </view>
+      <view class="form-item">
+        <text class="form-label">子类</text>
+        <picker bindchange="onSubCategoryChange" value="{{subCategoryIndex}}" range="{{subCategories}}">
+          <view class="form-input">
+            {{subCategories[subCategoryIndex] ? subCategories[subCategoryIndex] : '请选择子类'}}
+          </view>
+        </picker>
+      </view>
+      <view class="form-item">
+        <text class="form-label">原价</text>
+        <input class="form-input" type="digit" value="{{product.yuanjia}}" placeholder="0.00" bindinput="onInputChange"
+  data-field="yuanjia" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">折扣</text>
+        <input class="form-input" type="digit" value="{{product.zhekou}}" placeholder="例如: 0.8"
+  bindinput="onInputChange" data-field="zhekou" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">数量</text>
+        <input class="form-input" type="number" value="{{product.shuliang}}" placeholder="0" bindinput="onInputChange"
+  data-field="shuliang" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">备注</text>
+        <input class="form-input" value="{{product.beizhu}}" placeholder="请输入备注" bindinput="onInputChange"
+  data-field="beizhu" />
+      </view>
     </view>
-    <view class="form-item">
-      <text class="form-label">商品详情</text>
-      <textarea class="form-input" value="{{product.xiangqing}}" placeholder="请输入详情" bindinput="onInputChange" data-field="xiangqing" />
-    </view>
-    <view class="form-item">
-      <text class="form-label">分类</text>
-      <picker bindchange="onCategoryChange" value="{{categoryIndex}}" range="{{categories}}" range-key="name">
-        <view class="form-input">
-          {{categories[categoryIndex] ? categories[categoryIndex].name : '请选择分类'}}
+
+    <view class="form-card">
+      <text class="form-label">展示图</text>
+      <view class="image-upload-section">
+        <view class="upload-wrapper">
+          <view class="image-box" bindtap="uploadImage" data-field="ztu">
+            <image wx:if="{{product.ztu}}" src="{{product.ztu}}" mode="aspectFill" />
+            <text wx:else class="image-placeholder">上传展示图</text>
+            <view class="url-badge" catchtap="openUrlInput" data-field="ztu">🔗 URL</view>
+          </view>
+          <view class="del-btn" bindtap="deleteImage" data-field="ztu">删除</view>
         </view>
-      </picker>
+      </view>
     </view>
-    <view class="form-item">
-      <text class="form-label">子类</text>
-      <picker bindchange="onSubCategoryChange" value="{{subCategoryIndex}}" range="{{subCategories}}">
-        <view class="form-input">
-          {{subCategories[subCategoryIndex] ? subCategories[subCategoryIndex] : '请选择子类'}}
+
+    <view class="form-card">
+      <text class="form-label">轮播图预览 (自动切换)</text>
+      <view class="carousel-preview" style="width: 100%; height: 400rpx; margin-bottom: 30rpx; border-radius: 20rpx; overflow: hidden; border: 1rpx solid #ddd;">
+        <swiper style="width: 100%; height: 100%;" autoplay="{{true}}" interval="3000" circular="{{true}}">
+          <swiper-item wx:if="{{product.ltu1}}">
+            <image src="{{product.ltu1}}" mode="aspectFill" style="width: 100%; height: 100%;" />
+          </swiper-item>
+          <swiper-item wx:if="{{product.ltu2}}">
+            <image src="{{product.ltu2}}" mode="aspectFill" style="width: 100%; height: 100%;" />
+          </swiper-item>
+          <swiper-item wx:if="{{product.ltu3}}">
+            <image src="{{product.ltu3}}" mode="aspectFill" style="width: 100%; height: 100%;" />
+          </swiper-item>
+          <swiper-item wx:if="{{!product.ltu1 && !product.ltu2 && !product.ltu3}}" style="display: flex; align-items: center; justify-content: center; background: #f5f5f5;">
+            <text style="color: #999; font-size: 24rpx;">暂无轮播图</text>
+          </swiper-item>
+        </swiper>
+      </view>
+
+      <text class="form-label" style="margin-top: 20rpx;">管理轮播图</text>
+      <view class="image-upload-section">
+        <view class="upload-wrapper">
+          <view class="image-box" bindtap="uploadImage" data-field="ltu1">
+            <image wx:if="{{product.ltu1}}" src="{{product.ltu1}}" mode="aspectFill" />
+            <text wx:else class="image-placeholder">图1</text>
+            <view class="url-badge" catchtap="openUrlInput" data-field="ltu1">🔗 URL</view>
+          </view>
+          <view class="del-btn" bindtap="deleteImage" data-field="ltu1">删除</view>
         </view>
-      </picker>
+        <view class="upload-wrapper">
+          <view class="image-box" bindtap="uploadImage" data-field="ltu2">
+            <image wx:if="{{product.ltu2}}" src="{{product.ltu2}}" mode="aspectFill" />
+            <text wx:else class="image-placeholder">图2</text>
+            <view class="url-badge" catchtap="openUrlInput" data-field="ltu2">🔗 URL</view>
+          </view>
+          <view class="del-btn" bindtap="deleteImage" data-field="ltu2">删除</view>
+        </view>
+        <view class="upload-wrapper">
+          <view class="image-box" bindtap="uploadImage" data-field="ltu3">
+            <image wx:if="{{product.ltu3}}" src="{{product.ltu3}}" mode="aspectFill" />
+            <text wx:else class="image-placeholder">图3</text>
+            <view class="url-badge" catchtap="openUrlInput" data-field="ltu3">🔗 URL</view>
+          </view>
+          <view class="del-btn" bindtap="deleteImage" data-field="ltu3">删除</view>
+        </view>
+      </view>
     </view>
-    <view class="form-item">
-      <text class="form-label">原价</text>
-      <input class="form-input" type="digit" value="{{product.yuanjia}}" placeholder="0.00" bindinput="onInputChange" data-field="yuanjia" />
-    </view>
-    <view class="form-item">
-      <text class="form-label">折扣</text>
-      <input class="form-input" type="digit" value="{{product.zhekou}}" placeholder="例如: 0.8" bindinput="onInputChange" data-field="zhekou" />
-    </view>
-    <view class="form-item">
-      <text class="form-label">数量</text>
-      <input class="form-input" type="number" value="{{product.shuliang}}" placeholder="0" bindinput="onInputChange" data-field="shuliang" />
-    </view>
-    <view class="form-item">
-      <text class="form-label">备注</text>
-      <input class="form-input" value="{{product.beizhu}}" placeholder="请输入备注" bindinput="onInputChange" data-field="beizhu" />
-    </view>
+
+    <button class="submit-btn" bindtap="handleSubmit">更新商品</button>
   </view>
 
-  <view class="form-card">
-    <text class="form-label">展示图</text>
-    <view class="image-upload-section">
-      <view class="image-box" bindtap="uploadImage" data-field="ztu">
-        <image wx:if="{{product.ztu}}" src="{{product.ztu}}" mode="aspectFill" />
-        <text wx:else class="image-placeholder">上传展示图</text>
-      </view>
-    </view>
-  </view>
-
-  <view class="form-card">
-    <text class="form-label">轮播图</text>
-    <view class="image-upload-section">
-      <view class="image-box" bindtap="uploadImage" data-field="ltu1">
-        <image wx:if="{{product.ltu1}}" src="{{product.ltu1}}" mode="aspectFill" />
-        <text wx:else class="image-placeholder">图1</text>
-      </view>
-      <view class="image-box" bindtap="uploadImage" data-field="ltu2">
-        <image wx:if="{{product.ltu2}}" src="{{product.ltu2}}" mode="aspectFill" />
-        <text wx:else class="image-placeholder">图2</text>
-      </view>
-      <view class="image-box" bindtap="uploadImage" data-field="ltu3">
-        <image wx:if="{{product.ltu3}}" src="{{product.ltu3}}" mode="aspectFill" />
-        <text wx:else class="image-placeholder">图3</text>
+  <view class="modal-mask" wx:if="{{showUrlModal}}">
+    <view class="modal-content">
+      <view class="modal-header">通过URL更换图片</view>
+      <input class="form-input" value="{{tempUrl}}" placeholder="请输入图片完整链接 (http://...)" bindinput="onUrlInput"
+  />
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="closeUrlModal">取消</button>
+        <button class="btn-save" bindtap="saveUrlImage">确认保存</button>
       </view>
     </view>
   </view>
-
-  <button class="submit-btn" bindtap="handleSubmit">更新商品</button>
-</view>

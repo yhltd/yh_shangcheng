@@ -1,7 +1,11 @@
 Page({
   data: {
     dianpuName: '',
-    products: []
+    products: [],
+    storeConfig: {
+      bannerUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80',
+      welcomeText: '欢迎光临我的店铺'
+    }
   },
 
   onLoad: function() {
@@ -9,7 +13,7 @@ Page({
   },
 
   loadStoreData: function() {
-    const user = wx.getStorageSync('userLoginInfo') || {};
+    const user = wx.getStorageSync('user') || {};
     const dianpu = user.dianpu;
 
     if (!dianpu) {
@@ -24,7 +28,28 @@ Page({
       dianpuName: dianpu
     });
 
+    this.fetchStoreConfig(dianpu);
     this.fetchStoreProducts(dianpu);
+  },
+
+  fetchStoreConfig: function(dianpu) {
+    wx.cloud.callFunction({
+      name: 'shangcheng',
+      data: {
+        query: `SELECT TOP 1 tupianurl, welcometext FROM dianpu WHERE dianpuname = '${dianpu}'`
+      },
+      success: (res) => {
+        const data = res.result && res.result.recordsets && res.result.recordsets[0];
+        if (data && data.length > 0) {
+          this.setData({
+            storeConfig: {
+              bannerUrl: data[0].tupianurl || this.data.storeConfig.bannerUrl,
+              welcomeText: data[0].welcometext || this.data.storeConfig.welcomeText
+            }
+          });
+        }
+      }
+    });
   },
 
   fetchStoreProducts: function(dianpu) {

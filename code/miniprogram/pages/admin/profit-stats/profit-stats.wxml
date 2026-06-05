@@ -5,14 +5,24 @@
 
   <view class="stats-grid">
     <view class="stat-card primary">
-      <text class="stat-label">总营业额</text>
+      <text class="stat-label">总流水</text>
       <text class="stat-value">￥{{totalRevenue}}</text>
-      <text class="stat-trend">实时同步中</text>
+      <text class="stat-trend">所有订单金额</text>
     </view>
     <view class="stat-card">
       <text class="stat-label">订单总量</text>
       <text class="stat-value">{{totalOrders}}</text>
-      <text class="stat-trend">已完成订单</text>
+      <text class="stat-trend">成功下单数</text>
+    </view>
+    <view class="stat-card danger">
+      <text class="stat-label">退货量</text>
+      <text class="stat-value">{{returnOrders}}</text>
+      <text class="stat-trend">已审核退货数</text>
+    </view>
+    <view class="stat-card success">
+      <text class="stat-label">净营收</text>
+      <text class="stat-value">￥{{netRevenue}}</text>
+      <text class="stat-trend">总流水 - 退货额</text>
     </view>
   </view>
 

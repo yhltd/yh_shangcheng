@@ -1,4 +1,15 @@
 <view class="category-container">
+  <view class="category-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20rpx; background: #f8f8f8; border-bottom: 1rpx solid #ddd;">
+    <view style="display: flex; align-items: center;">
+      <text class="header-title" style="font-weight: bold; font-size: 32rpx;">商品分类</text>
+      <view wx:if="{{isAdminMode}}" bindtap="handleAddSubCategory" style="margin-left: 20rpx; font-size: 24rpx; color: #07c160; background: #e8fcf0; padding: 6rpx 16rpx; border-radius: 10rpx; border: 1rpx solid #07c160;">
+        + 添加子类
+      </view>
+    </view>
+    <view class="admin-toggle" wx:if="{{canAdmin}}" bindtap="toggleAdminMode" style="font-size: 24rpx; color: #666; background: #eee; padding: 10rpx 20rpx; border-radius: 30rpx;">
+      {{isAdminMode ? '✅ 编辑中' : '⚙️ 管理'}}
+    </view>
+  </view>
   <view class="category-main">
     <!-- 左侧大分类列表 -->
     <scroll-view class="category-left" scroll-y>
@@ -9,8 +20,11 @@
         bindtap="onCategoryTap"
         data-index="{{index}}"
       >
-        <text class="category-icon">{{item.icon}}</text>
-        <text class="category-name">{{item.name}}</text>
+        <view style="display: flex; align-items: center; position: relative;">
+          <image class="category-icon" src="{{item.icon}}" mode="aspectFit" style="width: 40rpx; height: 40rpx; margin-right: 10rpx;"></image>
+          <text class="category-name">{{item.name}}</text>
+          <text wx:if="{{isAdminMode}}" catchtap="confirmDeleteIcon" data-id="{{item.id}}" data-name="{{item.name}}" style="color: red; margin-left: 10rpx; font-size: 20rpx;">×</text>
+        </view>
       </view>
     </scroll-view>
 
@@ -27,6 +41,7 @@
           <view class="sub-grid">
             <view class="sub-item {{selectedSubCategory === sub ? 'active' : ''}}" wx:for="{{subCategories}}" wx:for-item="sub" wx:key="*this" bindtap="onSubCategoryTap" data-name="{{sub}}">
               {{sub}}
+              <text wx:if="{{isAdminMode}}" catchtap="confirmDeleteSubCategory" data-name="{{sub}}" style="color: red; margin-left: 10rpx; font-size: 24rpx; padding: 5rpx; z-index: 10;">×</text>
             </view>
           </view>
         </view>
@@ -50,6 +65,18 @@
             </view>
           </scroll-view>
         </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 编辑图标弹窗 -->
+  <view class="modal-mask" wx:if="{{showEdit}}" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 100;">
+    <view class="modal-content" style="background: white; width: 80%; border-radius: 20rpx; padding: 40rpx;">
+      <text class="modal-title" style="display: block; font-weight: bold; margin-bottom: 30rpx; text-align: center;">更换分类图标URL</text>
+      <input class="modal-input" style="border: 1rpx solid #ddd; padding: 20rpx; border-radius: 10rpx; margin-bottom: 30rpx;" placeholder="请输入图片URL链接" value="{{editingUrl}}" bindinput="onInputUrl" />
+      <view style="display: flex; justify-content: space-around;">
+        <button size="mini" bindtap="closeEditModal">取消</button>
+        <button size="mini" type="primary" bindtap="saveIconUrl">保存</button>
       </view>
     </view>
   </view>

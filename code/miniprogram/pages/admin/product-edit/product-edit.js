@@ -14,6 +14,9 @@ Page({
       { id: 8, name: '家庭', icon: '🏠' }
     ],
     subCategories: [],
+    showUrlModal: false,
+    tempUrl: '',
+    targetImageUrlField: '',
     product: {
       mingcheng: '',
       xiangqing: '',
@@ -26,19 +29,50 @@ Page({
       ltu2: '',
       ltu3: '',
       beizhu: ''
-    }
+    },
+    carouselIndex: 0,
+    carouselTimer: null,
   },
 
   onLoad: function(options) {
-    if (options.id) {
+    this.startCarouselTimer();
+    if (options && options.id) {
       this.setData({
         productId: options.id
       });
       this.fetchProductDetail(options.id);
     } else {
-      wx.showToast({ title: '商品ID缺失', icon: 'none' });
-      setTimeout(() => wx.navigateBack(), 1500);
+      console.error('Product ID missing in onLoad options');
+      wx.navigateBack({
+        fail: () => {
+          wx.reLaunch({ url: '/pages/admin/product-manage/product-manage' });
+        }
+      });
     }
+  },
+
+  startCarouselTimer: function() {
+    if (this.data.carouselTimer) {
+      clearInterval(this.data.carouselTimer);
+    }
+    this.data.carouselTimer = setInterval(() => {
+      const current = this.data.carouselIndex;
+      this.setData({
+        carouselIndex: (current + 1) % 5
+      });
+    }, 3000);
+    this.setData({ carouselTimer: this.data.Timer });
+  },
+
+  stopCarouselTimer: function() {
+    if (this.data.carouselTimer) {
+      clearInterval(this.data.carouselTimer);
+      this.setData({ carouselTimer: null });
+    }
+  },
+
+  onUnload: function() {
+    this.stopCarouselTimer();
   },
 
   fetchProductDetail: function(id) {
@@ -54,13 +88,11 @@ Page({
         if (product) {
           this.setData({ product: product });
 
-          // 设置分类索引
           const catIndex = this.data.categories.findIndex(c => c.name === product.fenlei);
           if (catIndex !== -1) {
             this.setData({ categoryIndex: catIndex });
             this.fetchSubCategories(product.fenlei);
 
-            // 异步等待子类加载后设置子类索引
             const timer = setInterval(() => {
               if (this.data.subCategories.length > 0) {
                 const subIndex = this.data.subCategories.indexOf(product.fenlei2);
@@ -139,8 +171,10 @@ Page({
     });
   },
 
+  // 修改：统一为私有服务器动态路径上传
   uploadImage: function(e) {
     const field = e.currentTarget.dataset.field;
+    const that = this;
 
     wx.chooseMedia({
       count: 1,
@@ -149,20 +183,49 @@ Page({
       success: (res) => {
         const tempFilePath = res.tempFiles[0].tempFilePath;
 
-        wx.showLoading({ title: '上传中...' });
+        wx.showLoading({ title: '上传中...', mask: true });
 
-        wx.cloud.uploadFile({
-          cloudPath: `products/${Date.now()}_${field}.jpg`,
+        // 1. 构建动态路径 (与 profile.js 统一)
+        const user = wx.getStorageSync('userLoginInfo') || {};
+        const companyName = user.dianpu || 'DefaultShop';
+        const account = user.userAccount || 'admin';
+
+        // 路径格式：/shangcheng/公司名/商品ID_字段名.jpg
+        const dynamicPath = `/shangcheng/${companyName}/`;
+        const finalFileName = `${that.data.productId}_${field}.jpg`;
+        const fileUrl = `http://yhocn.cn:9088/shangcheng/${companyName}/${finalFileName}`;
+
+        // 2. 使用 wx.uploadFile 上传到私有服务器
+        wx.uploadFile({
+          url: 'https://yhocn.cn:9097/file/upload',
           filePath: tempFilePath,
-          success: (res) => {
-            this.setData({
-              [`product.${field}`]: res.fileID
-            });
-            wx.showToast({ title: '上传成功', icon: 'success' });
+          name: 'file',
+          formData: {
+            name: finalFileName,
+            path: dynamicPath,
+            kongjian: '3',
+            timestamp: Date.now()
+          },
+          success: (uploadRes) => {
+            try {
+              const resData = JSON.parse(uploadRes.data);
+              if (resData.code === 200 || resData.success) {
+                // 3. 将构建的 URL 绑定到商品字段
+                that.setData({
+                  [`product.${field}`]: fileUrl
+                });
+                wx.showToast({ title: '上传成功', icon: 'success' });
+              } else {
+                throw new Error(resData.msg || '服务器响应错误');
+              }
+            } catch (e) {
+              console.error('解析响应失败', e);
+              wx.showToast({ title: '上传失败: ' + e.message, icon: 'none' });
+            }
           },
           fail: (err) => {
-            console.error('Upload failed', err);
-            wx.showToast({ title: '上传失败', icon: 'none' });
+            console.error('网络上传失败', err);
+            wx.showToast({ title: '网络上传失败', icon: 'none' });
           },
           complete: () => {
             wx.hideLoading();
@@ -170,6 +233,96 @@ Page({
         });
       }
     });
+  },
+
+  openUrlInput: function(e) {
+    const field = e.currentTarget.dataset.field;
+    this.setData({
+      showUrlModal: true,
+      targetImageUrlField: field,
+      tempUrl: this.data.product[field] || ''
+    });
+  },
+
+  onUrlInput: function(e) {
+    this.setData({ tempUrl: e.detail.value });
+  },
+
+  closeUrlModal: function() {
+    this.setData({ showUrlModal: false });
+  },
+
+  saveUrlImage: function() {
+    const url = this.data.tempUrl;
+    const field = this.data.targetImageUrlField;
+
+    if (!url) {
+      wx.showToast({ title: '请输入图片URL', icon: 'none' });
+      return;
+    }
+
+    this.setData({
+      [`product.${field}`]: url,
+      showUrlModal: false
+    });
+    wx.showToast({ title: 'URL已设置', icon: 'success' });
+  },
+
+  deleteImage: function(e) {
+    const field = e.currentTarget.dataset.field;
+    const that = this;
+    const currentUrl = this.data.product[field];
+
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要清空这张图片吗？这将同时删除服务器上的物理文件。',
+      success: (res) => {
+        if (res.confirm) {
+          if (!currentUrl) {
+            that.setData({ [`product.${field}`]: '' });
+            wx.showToast({ title: '已删除', icon: 'success' });
+            return;
+          }
+          that.handlePhysicalImageDelete(currentUrl, field);
+        }
+      }
+    });
+  },
+
+  handlePhysicalImageDelete: function(fileUrl, field) {
+    const that = this;
+
+    // 1. 从 URL 中提取文件名
+    const fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    const cleanFileName = fileName.split('.')[0]; // 移除扩展名
+
+    // 2. 获取公司名以构建正确的删除路径
+    const user = wx.getStorageSync('userLoginInfo') || {};
+    const companyName = user.dianpu || 'DefaultShop';
+    const dynamicPath = `/shangcheng/${companyName}/`;
+
+    wx.showLoading({ title: '正在删除物理文件...', mask: true });
+
+    // 3. 调用物理删除接口
+    wx.request({
+      url: `https://yhocn.cn:9097/file/delete?order_number=${cleanFileName}&path=${encodeURIComponent(dynamicPath)}`,
+      method: 'POST',
+      header: { 'content-type': 'application/x-www-form-urlencoded' },
+      success: (res) => {
+        console.log('物理删除响应:', res.data);
+        that.setData({ [`product.${field}`]: '' });
+        wx.showToast({ title: '已彻底删除', icon: 'success' });
+      },
+      fail: (err) => {
+        console.error('物理删除请求失败:', err);
+        that.setData({ [`product.${field}`]: '' });
+        wx.showToast({ title: '图片已移除', icon: 'none' });
+      },
+      complete: () => {
+        wx.hideLoading();
+      }
+    });
+
   },
 
   handleSubmit: function() {
@@ -182,7 +335,7 @@ Page({
 
     wx.showLoading({ title: '保存中...' });
 
-    let user = wx.getStorageSync('user') || {};
+    let user = wx.getStorageSync('userLoginInfo') || {};
     let dianpu = user.dianpu || 'DefaultShop';
 
     const sql = `UPDATE shangpin SET

@@ -2,6 +2,8 @@ Page({
   data: {
     totalRevenue: '0.00',
     totalOrders: 0,
+    returnOrders: 0,    // 退货量
+    netRevenue: '0.00',  // 净营收
     hotProducts: [],
     recentOrders: [],
     orderList: []
@@ -28,11 +30,15 @@ Page({
 
   fetchStats: function(storeName) {
     wx.showLoading({ title: '加载统计中...' });
+
+    // 修改 SQL：使用 CASE WHEN 分别统计下单金额和退货金额
     var query = "SELECT " +
-      "COUNT(*) as total_count, " +
-      "SUM(CAST(CASE WHEN xshj IS NULL OR xshj = '' THEN '0' ELSE xshj END AS DECIMAL(18,2))) as total_amount " +
+      "COUNT(CASE WHEN ddzt IN ('下单', '申请退货') THEN 1 END) as total_count, " +
+      "SUM(CAST(CASE WHEN ddzt IN ('下单', '申请退货') AND (xshj IS NOT NULL AND xshj <> '') THEN xshj ELSE '0' END AS DECIMAL(18,2))) as total_total_amount, " +
+      "COUNT(CASE WHEN ddzt = '退货' THEN 1 END) as return_count, " +
+      "SUM(CAST(CASE WHEN ddzt = '退货' AND (xshj IS NOT NULL AND xshj <> '') THEN xshj ELSE '0' END AS DECIMAL(18,2))) as return_amount " +
       "FROM dingdan " +
-      "WHERE sjmc = '" + storeName + "' AND ddzt = '下单'";
+      "WHERE sjmc = '" + storeName + "'";
 
     wx.cloud.callFunction({
       name: 'shangcheng',
@@ -52,12 +58,16 @@ Page({
 
         if (data && data.length > 0) {
           const row = data[0];
-          const amount = parseFloat(row.total_amount || 0);
-          const count = parseInt(row.total_count || 0);
+          const revenue = parseFloat(row.total_total_amount || 0);
+          const orders = parseInt(row.total_count || 0);
+          const returns = parseInt(row.return_count || 0);
+          const returnAmt = parseFloat(row.return_amount || 0);
 
           this.setData({
-            totalRevenue: amount.toFixed(2),
-            totalOrders: count
+            totalRevenue: revenue.toFixed(2),
+            totalOrders: orders,
+            returnOrders: returns,                     // 体现退货量
+            netRevenue: (revenue - returnAmt).toFixed(2) // 体现净营收
           });
         }
       },

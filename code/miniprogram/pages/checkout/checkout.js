@@ -105,26 +105,47 @@ Page({
 
     const user = wx.getStorageSync('userLoginInfo') || wx.getStorageSync('user') || {};
     const account = user.userAccount;
+    const userName = user.userName || '未知用户';
+
+    // 从地址数据中获取店铺名（如果可用），或者从缓存获取
+    const storeName = user.dianpu || '默认店铺';
 
     if (!account) {
       wx.showToast({ title: '请先登录', icon: 'none' });
       return;
     }
 
-    wx.showLoading({ title: '正在发起支付...', mask: true });
+    wx.showLoading({ title: '正在处理订单...', mask: true });
 
     try {
       const orderId = 'ORD' + Date.now();
       const total = parseFloat(this.data.totalPrice);
       const amountInFen = Math.round(total * 100); // 转换为分
 
-      // 调用 V2 支付云函数 'pay'
+      // 1. 先将订单详情写入数据库 (dingdan 表)
+      // 构建多行插入 SQL 语句
+      let sqlValues = this.data.items.map(item => {
+        return `('${orderId}', '${item.pname}', ${item.num}, ${item.price}, ${item.subtotal}, '${userName}', '${storeName}', '下单', '可见')`;
+      }).join(',');
+
+      const insertQuery = `INSERT INTO dingdan (ddh, cpmc, xssl, xsdj, xshj, khmc, sjmc, ddzt, visibility) VALUES ${sqlValues}`;
+
+      await wx.cloud.callFunction({
+        name: 'shangcheng',
+        data: { query: insertQuery }
+      });
+
+      // 2. 调用 pay 云函数获取支付参数
+      console.log('Calling pay function with:', { orderid: orderId, money: amountInFen });
+
+      const payData = {
+        orderid: String(orderId),
+        money: Number(amountInFen)
+      };
+
       const res = await wx.cloud.callFunction({
         name: 'pay',
-        data: {
-          orderid: orderId,
-          money: amountInFen
-        }
+        data: payData
       });
 
       wx.hideLoading();
@@ -135,7 +156,7 @@ Page({
 
       const payParams = res.result.data;
 
-      // 调起微信支付 (使用 V2 返回的参数名)
+      // 3. 调起微信支付
       wx.requestPayment({
         timeStamp: payParams.timeStamp,
         nonceStr: payParams.nonceStr,
@@ -161,7 +182,7 @@ Page({
       });
     } catch (err) {
       wx.hideLoading();
-      console.error('Payment Error:', err);
+      console.error('Order Submission Error:', err);
       wx.showToast({ title: err.message || '系统错误', icon: 'none' });
     }
   },

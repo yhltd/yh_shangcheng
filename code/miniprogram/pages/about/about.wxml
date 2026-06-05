@@ -2,7 +2,7 @@
   <view class="about-header">
     <image class="logo" src="/sucai/logo.png" mode="aspectFit"></image>
     <text class="title">关于商务商城</text>
-    <text class="version">版本 v1.0.0</text>
+    <text class="version">版本 v1.0.1</text>
   </view>
 
   <view class="about-content">

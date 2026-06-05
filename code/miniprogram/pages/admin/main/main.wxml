@@ -10,4 +10,45 @@
       <text class="admin-name">{{item.name}}</text>
     </view>
   </view>
+
+  <!-- 新增：管理商家配置入口按钮 -->
+  <view class="store-manage-section">
+    <button class="manage-store-btn" bindtap="openStoreModal">⚙️ 配置店铺门户 (图片/欢迎语)</button>
+  </view>
+
+  <!-- 新增：商家配置弹窗 -->
+  <view class="modal-mask" wx:if="{{showStoreModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">独立商家门户配置</text>
+        <text class="close-btn" bindtap="closeStoreModal">×</text>
+      </view>
+
+      <view class="modal-body">
+        <view class="config-item">
+          <text class="config-label">店铺欢迎语</text>
+          <input class="config-input" placeholder="例如：欢迎来到我的店铺" value="{{storeConfig.welcomeText}}" bindinput="bindInputWelcome" />
+        </view>
+
+        <view class="config-item">
+          <text class="config-label">店铺门户图片</text>
+          <view class="banner-upload-box">
+            <image src="{{storeConfig.bannerUrl}}" mode="aspectFill" class="banner-preview" wx:if="{{storeConfig.bannerUrl}}" />
+            <view class="upload-placeholder" bindtap="uploadStoreBanner" wx:if="{{!storeConfig.bannerUrl}}">
+              <text class="upload-icon">📷</text>
+              <text>点击上传封面图</text>
+            </view>
+            <view class="upload-overlay" bindtap="uploadStoreBanner" wx:if="{{storeConfig.bannerUrl}}">
+              <text>更换图片</text>
+            </view>
+            <view class="delete-banner-btn" bindtap="deleteStoreBanner" wx:if="{{storeConfig.bannerUrl}}">🗑️</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="save-btn" bindtap="saveStoreConfig">保存配置</button>
+      </view>
+    </view>
+  </view>
 </view>

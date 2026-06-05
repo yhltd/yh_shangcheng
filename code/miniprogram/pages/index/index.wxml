@@ -15,7 +15,10 @@
       <view class="search-btn" bindtap="onSearchClick">搜索</view>
     </view>
     <view class="login-btn" bindtap="onLogin">{{userName}}</view>
-    <view class="pay-test-btn" bindtap="goToPayTest">支付测试</view>
+    <view class="admin-toggle" wx:if="{{canAdmin}}" bindtap="toggleAdminMode">
+      {{isAdminMode ? '✅ 编辑中' : '⚙️ 管理'}}
+    </view>
+  
   </view>
 
   <!-- 登录/注册弹窗 -->
@@ -83,17 +86,22 @@
   <!-- 快捷分类入口 (升级为左右拖动) -->
   <view class="category-section">
     <scroll-view scroll-x="true" class="category-scroll">
-      <view class="cat-item {{currentCategory === '全部' ? 'cat-active' : ''}}" bindtap="onCategoryTap" data-name="全部">
-        <view class="cat-icon-box">
-          <image src="https://cdn-icons-png.flaticon.com/128/1828/1828853.png" mode="aspectFit" class="cat-icon-img"></image>
-        </view>
-        <text class="cat-name">全部</text>
-      </view>
       <view class="cat-item {{currentCategory === item.name ? 'cat-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-name="{{item.name}}">
         <view class="cat-icon-box">
           <image src="{{item.icon}}" mode="aspectFit" class="cat-icon-img"></image>
+          <view class="admin-tools" wx:if="{{isAdminMode}}">
+            <text class="tool-btn edit" bindtap="editIcon" data-id="{{item.id}}" data-url="{{item.icon}}">✎</text>
+            <text class="tool-btn delete" bindtap="deleteIcon" data-id="{{item.id}}" data-url="{{item.icon}}">×</text>
+          </view>
         </view>
         <text class="cat-name">{{item.name}}</text>
+      </view>
+      <!-- 新增：管理员添加分类按钮 -->
+      <view class="cat-item add-cat" wx:if="{{isAdminMode}}" bindtap="addNewIcon">
+        <view class="cat-icon-box">
+          <text class="add-symbol">+</text>
+        </view>
+        <text class="cat-name">新增</text>
       </view>
     </scroll-view>
   </view>
@@ -134,4 +142,5 @@
       <view class="cart-icon-btn bg-primary-green {{item.isSoldOut ? 'disabled' : ''}}">🛒</view>
     </view>
   </view>
+
 </view>

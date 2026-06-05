@@ -64,6 +64,12 @@ Page({
     });
   },
 
+  goToOrderManage: function() {
+    wx.navigateTo({
+      url: '/pages/admin/order-manage/order-manage'
+    });
+  },
+
   goToAddress: function() {
     const loginInfo = wx.getStorageSync('userLoginInfo');
     if (!loginInfo) {

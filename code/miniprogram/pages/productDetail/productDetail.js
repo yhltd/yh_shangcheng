@@ -52,6 +52,7 @@ Page({
             price: currentPrice,
             originalPrice: originalPrice.toFixed(2),
             img: product.ztu,
+            imageList: [product.ztu, product.ltu1, product.ltu2, product.ltu3].filter(Boolean),
             detail: product.xiangqing || '暂无详细描述',
             category: product.fenlei,
             subCategory: product.fenlei2,

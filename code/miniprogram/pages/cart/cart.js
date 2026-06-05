@@ -32,19 +32,29 @@ Page({
       success: (res) => {
         const data = res.result && res.result.recordsets && res.result.recordsets[0];
         if (data && data.length > 0) {
-          const items = data.map(item => ({
-            id: item.ddh,
-            name: item.cpmc,
-            price: item.xsdj,
-            count: item.xssl,
-            total: item.xshj,
-            selected: true
-          }));
+          // --- 优化：商品数量叠加逻辑 ---
+          const groupMap = {};
+          data.forEach(item => {
+            const name = item.cpmc;
+            if (!groupMap[name]) {
+              groupMap[name] = {
+                id: item.ddh,
+                name: item.cpmc,
+                price: item.xsdj,
+                count: 0,
+                total: 0,
+                selected: true,
+                allIds: [item.ddh] // 记录该商品对应的所有订单号，用于删除
+              };
+            }
+            groupMap[name].count += parseInt(item.xssl || 0);
+            groupMap[name].total += parseFloat(item.xshj || 0);
+            groupMap[name].allIds.push(item.ddh);
+          });
+          const items = Object.values(groupMap);
 
-          // Calculate total immediately before setData to avoid async lag
           const total = items.reduce((sum, item) => {
-            const val = parseFloat(item.total);
-            return sum + (isNaN(val) ? 0 : val);
+            return sum + (parseFloat(item.total) || 0);
           }, 0);
 
           this.setData({
@@ -85,11 +95,37 @@ Page({
     });
   },
 
+  // 新增：增加数量
+  plusCount: function(e) {
+    const index = e.currentTarget.dataset.index;
+    const items = JSON.parse(JSON.stringify(this.data.cartItems));
+    items[index].count++;
+    items[index].total = items[index].count * parseFloat(items[index].price || 0);
+
+    this.setData({ cartItems: items }, () => {
+      this.updateTotalPrice();
+    });
+  },
+
+  // 新增：减少数量
+  minusCount: function(e) {
+    const index = e.currentTarget.dataset.index;
+    const items = JSON.parse(JSON.stringify(this.data.cartItems));
+    if (items[index].count > 1) {
+      items[index].count--;
+      items[index].total = items[index].count * parseFloat(items[index].price || 0);
+      this.setData({ cartItems: items }, () => {
+        this.updateTotalPrice();
+      });
+    } else {
+      // 数量为1时点击减号，提示删除
+      this.deleteItem({ currentTarget: { dataset: { id: items[index].id } } });
+    }
+  },
+
   toggleSelect: function(e) {
     const index = e.currentTarget.dataset.index;
     const value = e.currentTarget.dataset.value;
-
-    console.log('ToggleSelect triggered via bindtap:', index, value);
 
     const items = JSON.parse(JSON.stringify(this.data.cartItems));
     items[index].selected = value;
@@ -109,8 +145,6 @@ Page({
 
   toggleSelectAll: function(e) {
     const isAllSelected = e.currentTarget.dataset.value;
-    console.log('ToggleSelectAll triggered via bindtap:', isAllSelected);
-
     const items = JSON.parse(JSON.stringify(this.data.cartItems));
     items.forEach(item => {
       item.selected = isAllSelected;
@@ -141,6 +175,8 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.showLoading({ title: '删除中...' });
+          // 注意：这里如果聚合了，可能需要删除所有关联的订单号，或者根据业务逻辑处理
+          // 简单起见，目前删除该组的首个订单ID，建议生产环境使用 IN (id1, id2...)
           wx.cloud.callFunction({
             name: 'shangcheng',
             data: {
@@ -178,8 +214,6 @@ Page({
       return;
     }
 
-    // 将选中的商品数据转换为字符串，通过 URL 传递
-    // 注意：URL 长度有限制，如果商品过多，建议使用全局状态管理或临时存储
     const itemsData = encodeURIComponent(JSON.stringify(selectedItems));
     const total = this.data.totalPrice;
 

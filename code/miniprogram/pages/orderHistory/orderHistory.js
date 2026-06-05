@@ -21,7 +21,7 @@ Page({
     wx.cloud.callFunction({
       name: 'shangcheng',
       data: {
-        query: `SELECT ddh, cpmc, xssl, xsdj, xshj, xdrq, ddzt FROM dingdan WHERE khmc = '${this.escape(khmc)}' AND ddzt IN ('下单', '退单') ORDER BY xdrq DESC`
+        query: `SELECT ddh, cpmc, xssl, xsdj, xshj, xdrq, ddzt FROM dingdan WHERE khmc = '${this.escape(khmc)}' AND ddzt IN ('下单', '退单', '申请退货', '退货') ORDER BY xdrq DESC`
       },
       success: (res) => {
         const data = res.result && res.result.recordsets && res.result.recordsets[0];
@@ -53,6 +53,36 @@ Page({
   goHome: function() {
     wx.reLaunch({
       url: '/pages/index/index'
+    });
+  },
+
+  applyReturn: function(e) {
+    const ddh = e.currentTarget.dataset.ddh;
+    wx.showModal({
+      title: '申请退货',
+      content: '确定要申请退货该商品吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({ title: '提交中...' });
+          wx.cloud.callFunction({
+            name: 'shangcheng',
+            data: {
+              query: `UPDATE dingdan SET ddzt = '申请退货' WHERE ddh = '${ddh}'`
+            },
+            success: () => {
+              wx.showToast({ title: '申请成功' });
+              this.fetchOrders();
+            },
+            fail: (err) => {
+              console.error('Apply return failed', err);
+              wx.showToast({ title: '申请失败', icon: 'none' });
+            },
+            complete: () => {
+              wx.hideLoading();
+            }
+          });
+        }
+      }
     });
   }
 })

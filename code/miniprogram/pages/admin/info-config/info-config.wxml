@@ -27,6 +27,9 @@
         <label class="radio-item">
           <radio value="alipay" checked="{{payConfig.Type === 'alipay'}}">支付宝</radio>
         </label>
+        <label class="radio-item">
+           <radio value="unionpay" checked="{{payConfig.Type === 'unionpay'}}">银联支付</radio>
+        </label>
       </radio-group>
     </view>
     <view class="config-item card">

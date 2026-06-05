@@ -1,0 +1,26 @@
+<view class="admin-container">
+  <view class="page-header">
+    <text class="title">订单管理</text>
+  </view>
+
+  <view class="order-list">
+    <view class="order-card card" wx:for="{{orders}}" wx:key="id">
+      <view class="order-main">
+        <view class="order-info">
+          <text class="order-id">订单号: {{item.ddh}}</text>
+          <text class="order-customer">客户: {{item.khmc}}</text>
+          <text class="order-product">商品: {{item.cpmc}}</text>
+          <text class="order-amount">金额: ￥{{item.xshj}}</text>
+        </view>
+        <view class="status-tag {{item.ddzt === '下单' ? 'status-ordered' : (item.ddzt === '申请退货' ? 'status-applying' : 'status-returned')}}">
+          {{item.ddzt}}
+        </view>
+      </view>
+
+      <view class="order-actions" wx:if="{{item.ddzt === '申请退货'}}">
+        <button class="btn-approve" bindtap="handleReturn" data-id="{{item.id}}" data-status="{{item.ddzt}}">同意退货</button>
+        <button class="btn-reject" bindtap="handleRejectReturn" data-id="{{item.id}}" data-status="{{item.ddzt}}">拒绝退货</button>
+      </view>
+    </view>
+  </view>
+</view>
