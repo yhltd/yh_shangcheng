@@ -1,5 +1,5 @@
 <view class="category-container">
-  <view class="category-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20rpx; background: #f8f8f8; border-bottom: 1rpx solid #ddd;">
+  <view class="category-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20rpx; background: #f8f; border-bottom: 1rpx solid #ddd;">
     <view style="display: flex; align-items: center;">
       <text class="header-title" style="font-weight: bold; font-size: 32rpx;">商品分类</text>
       <view wx:if="{{isAdminMode}}" bindtap="handleAddSubCategory" style="margin-left: 20rpx; font-size: 24rpx; color: #07c160; background: #e8fcf0; padding: 6rpx 16rpx; border-radius: 10rpx; border: 1rpx solid #07c160;">
@@ -80,4 +80,6 @@
       </view>
     </view>
   </view>
+
+  <custom-tabbar active="1" />
 </view>

@@ -44,4 +44,6 @@
       <button class="btn-save" bindtap="saveAddress">修改</button>
     </view>
   </view>
+
+  <custom-tabbar active="3" />
 </view>

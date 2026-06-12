@@ -143,4 +143,5 @@
     </view>
   </view>
 
+  <custom-tabbar active="0" />
 </view>

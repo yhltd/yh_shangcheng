@@ -39,5 +39,6 @@
       </view>
       <button class="btn-buy" bindtap="checkout">结算</button>
     </view>
-  </view>
+    </view>
+  <custom-tabbar active="2" />
 </view>
